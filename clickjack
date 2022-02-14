@@ -1,0 +1,89 @@
+package clickme;
+
+import java.awt.Desktop;
+import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class clickjack extends JPanel {
+  public clickjack() {
+    final JTextField txt = new JTextField("Please enter the test url");
+    txt.setBounds(30, 30, 400, 30);
+    txt.addMouseListener(new MouseAdapter() {
+          public void mouseClicked(MouseEvent e) {
+            txt.setText("");
+          }
+        });
+    JButton button = new JButton("Click Me");
+    button.setBounds(340, 80, 98, 27);
+    JButton button1 = new JButton("About");
+    button1.setBounds(350, 2, 80, 20);
+    setLayout((LayoutManager)null);
+    add(txt);
+    add(button);
+    add(button1);
+    button1.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            String getTxt = "OWASP Click Me will help you to create a test page for Click jacking vulnerability.\nClickjacking is an attack which targets the clickable content on a website.\n\nHow To test: \n1.Give the URL of your target site in the space given.\n2.Hit the Click Me button.\n3.That's it! Now please check whether your site is getting loaded in a frame.\n\nThank You :)\nArun Kumar";
+            JOptionPane.showMessageDialog(null, getTxt, "About: ", 1);
+          }
+        });
+    button.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            BufferedWriter bw = null;
+            try {
+              String url = txt.getText();
+              if (url.equals("") == true || url.equals("Please enter the test url") == true) {
+                System.out.println("hi");
+                String message = "Please enter the test URL and then Click Me :)";
+                JOptionPane.showMessageDialog(new JFrame(), message, "Wake up!", 0);
+              } else {
+                File f = new File("clickjacktest.html");
+                bw = new BufferedWriter(new FileWriter(f));
+                bw.write("<html>\n");
+                bw.write("<body>\n");
+                bw.write("<h1>Clickjack Test Page</h1>\n");
+                bw.write("<iframe src=\"" + url + "\"width=\"800\" height=\"500\"></iframe>\n");
+                bw.write("<p><a href=\"https://www.owasp.org/index.php/OWASP_Click_Me_Project\">OWASP reference page </a></p>");
+                bw.write("<!-- OWASP Click Me_Clickjack Test Page @Arun Kumar -->\n");
+                bw.write("</body>\n");
+                bw.write("</html>\n");
+                bw.close();
+                Desktop.getDesktop().browse(f.toURI());
+              } 
+            } catch (IOException ex) {
+              Logger.getLogger(clickjack.class.getName()).log(Level.SEVERE, (String)null, ex);
+            } finally {
+              try {
+                bw.close();
+              } catch (IOException ex) {
+                Logger.getLogger(clickjack.class.getName()).log(Level.SEVERE, (String)null, ex);
+              } 
+            } 
+          }
+        });
+  }
+  
+  public static void main(String[] args) {
+    JFrame frame = new JFrame("OWASP ClickMe");
+    frame.setLocationRelativeTo(null);
+    frame.getContentPane().add(new clickjack());
+    frame.setDefaultCloseOperation(3);
+    frame.setSize(500, 180);
+    frame.setVisible(true);
+    frame.setResizable(false);
+  }
+}
