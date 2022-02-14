@@ -1,0 +1,13 @@
+
+<html> 
+<!--This is a test page for testing click jack vulnerability-->
+<h1>Clickjacking Test Page</h1>
+<body bgcolor="#CCCCB2">
+<iframe id='theframe' width="800px" height="400px"></iframe>
+</body> 
+<p>
+Enter the test url <input type='text' id='url' size="">
+<input type='submit' value='click me' onclick="document.getElementById('theframe').src=document.getElementById('url').value"" > </p>
+<p><a href="https://www.owasp.org/index.php/OWASP_Click_Me_Project">OWASP reference page </a></p>
+<!--reference :  OWASP Click Me_Clickjack Test Page @Arun Kumar-->
+</html>
